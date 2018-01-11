@@ -7,4 +7,27 @@
         android:title="github"
         app:showAsAction="always"
         android:icon="@drawable/github"/>
+    <item
+        android:id="@+id/preferences"
+        android:visible="true"
+        android:titleCondensed="Preferences"
+        android:title="Preferences"
+        android:enabled="true"
+        android:icon="@drawable/preferences"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/osts"
+                android:checkable="true"
+                android:title="Osts" />
+            <item
+                android:id="@+id/openings"
+                android:checkable="true"
+                android:title="Openings" />
+            <item
+                android:id="@+id/endings"
+                android:checkable="true"
+                android:title="Endings" />
+        </menu>
+    </item>
 </menu>

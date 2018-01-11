@@ -3,6 +3,7 @@ package com.example.dipansh.ongaku_android;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer media;
     private SeekBar seekBar;
     private int songLength;
+    private String urltext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +160,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return returnString.toString();
+    }
+
+
+
+
+    private class PrepareMusicPlayer extends AsyncTask<String, Integer, String> {
+        protected String doInBackground(String... strings) {
+            try {
+                media.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(String string) {
+            media.start();
+            play.setImageResource(android.R.drawable.ic_media_pause);
+            Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

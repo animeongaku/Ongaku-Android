@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         play = findViewById(R.id.play);
         media = new MediaPlayer();
+        media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         seekBar = findViewById(R.id.seekBar);
         seekBar.setMax(99);
 
@@ -59,12 +60,24 @@ public class MainActivity extends AppCompatActivity {
         adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
         listView.setAdapter(adapter);
 
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://lyricmp3skull.org/s363640c/file/boku-no-hero-academia-op-1/261606779.mp3"; // your URL here
-                media.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                if(!media.isPlaying()){
+                    if(urltext != null){
+                        media.start();
+                        play.setImageResource(android.R.drawable.ic_media_pause);
+                        Toast.makeText(MainActivity.this, "playing", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(MainActivity.this, "Select a song to play !!", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    media.pause();
+                    play.setImageResource(android.R.drawable.ic_media_play);
+                    Toast.makeText(MainActivity.this, "paused", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
                 try {
                     media.setDataSource(url);
                     Toast.makeText(MainActivity.this, "starting", Toast.LENGTH_SHORT).show();

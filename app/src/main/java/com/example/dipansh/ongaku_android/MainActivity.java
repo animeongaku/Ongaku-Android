@@ -6,13 +6,12 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Song> list = new ArrayList<>();
         list = extractData(ReadFromfile("data.json", MainActivity.this));
 
-        Toast.makeText(this, list.get(1).getImage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Welcome to Ongaku !!", Toast.LENGTH_SHORT).show();
 
 
         ListView listView = (ListView) findViewById(R.id.list);
@@ -78,16 +77,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Song song = (Song) parent.getItemAtPosition(position);
+                Toast.makeText(MainActivity.this, song.getName(), Toast.LENGTH_SHORT).show();
+
                 try {
-                    media.setDataSource(url);
-                    Toast.makeText(MainActivity.this, "starting", Toast.LENGTH_SHORT).show();
-                    media.prepare(); // might take long! (for buffering, etc)
+                    urltext = song.getLink();
+                    media.reset();
+                    media.setDataSource(urltext);
+                    new PrepareMusicPlayer().execute(urltext);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                media.start();
-
-                Toast.makeText(MainActivity.this, "started", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -142,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
         return mylist;
     }
-
 
     public String ReadFromfile(String fileName, Context context) {
         StringBuilder returnString = new StringBuilder();

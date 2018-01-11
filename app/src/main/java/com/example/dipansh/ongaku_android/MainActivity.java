@@ -83,9 +83,33 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             JSONObject main = new JSONObject(s);
-            //JSONObject contacts = main.getJSONObject("myContacts");
-            JSONArray list = main.getJSONArray("openings");
+            JSONObject contacts = main.getJSONObject("songs");
 
+            JSONArray list = contacts.getJSONArray("openings");
+            for(int i=0;i<list.length();i++){
+                JSONObject obj = list.getJSONObject(i);
+
+                String link = obj.getString("link");
+                String name = obj.getString("name");
+                String image = obj.getString("img");
+
+                Song song = new Song(link , name , image);
+                mylist.add(song);
+            }
+
+            list = contacts.getJSONArray("endings");
+            for(int i=0;i<list.length();i++){
+                JSONObject obj = list.getJSONObject(i);
+
+                String link = obj.getString("link");
+                String name = obj.getString("name");
+                String image = obj.getString("img");
+
+                Song song = new Song(link , name , image);
+                mylist.add(song);
+            }
+
+            list = contacts.getJSONArray("osts");
             for(int i=0;i<list.length();i++){
                 JSONObject obj = list.getJSONObject(i);
 

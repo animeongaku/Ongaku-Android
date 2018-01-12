@@ -274,4 +274,12 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        media.pause();
+        play.setImageResource(android.R.drawable.ic_media_play);
+        super.onPause();
+    }
+
 }

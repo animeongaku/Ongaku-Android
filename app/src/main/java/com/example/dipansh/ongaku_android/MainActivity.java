@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private int songLength;
     private String urltext;
+    public ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         play = findViewById(R.id.play);
+        progressBar = findViewById(R.id.progressBar);
         media = new MediaPlayer();
         media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         seekBar = findViewById(R.id.seekBar);
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Welcome to Ongaku !!", Toast.LENGTH_SHORT).show();
 
 
+        progressBar.setVisibility(View.INVISIBLE);
         ListView listView = (ListView) findViewById(R.id.list);
         SongAdapter adapter = null;
         adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     media.reset();
                     media.setDataSource(urltext);
                     new PrepareMusicPlayer().execute(urltext);
+                    progressBar.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -197,7 +202,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String string) {
+            songLength = media.getDuration();
             media.start();
+            progressBar.setVisibility(View.INVISIBLE);
             play.setImageResource(android.R.drawable.ic_media_pause);
             Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
         }

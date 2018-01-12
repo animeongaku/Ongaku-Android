@@ -282,4 +282,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        media.release();
+        super.onStop();
+    }
 }

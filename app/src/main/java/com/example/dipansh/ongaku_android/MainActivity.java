@@ -1,10 +1,13 @@
 package com.example.dipansh.ongaku_android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton play;
     private MediaPlayer media;
     private SeekBar seekBar;
+
     private int songLength;
     private String urltext;
     public ProgressBar progressBar;
+    private ProgressBar progressBar2;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +55,31 @@ public class MainActivity extends AppCompatActivity {
         media = new MediaPlayer();
         media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         seekBar = findViewById(R.id.seekBar);
-        seekBar.setMax(99);
+        progressBar2 = findViewById(R.id.progressBar2);
 
         ArrayList<Song> list = new ArrayList<>();
         list = extractData(ReadFromfile("data.json", MainActivity.this));
 
         Toast.makeText(this, "Welcome to Ongaku !!", Toast.LENGTH_SHORT).show();
 
-
         progressBar.setVisibility(View.INVISIBLE);
         ListView listView = (ListView) findViewById(R.id.list);
         SongAdapter adapter = null;
         adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
         listView.setAdapter(adapter);
+
+        handler = new Handler();
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(media != null){
+                    if(media.isPlaying()){
+                        progressBar2.setProgress((int)((float)media.getCurrentPosition()*100/songLength));
+                    }
+                }
+                handler.postDelayed(this, 30);
+            }
+        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +118,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(media.isPlaying()){
+                    int playPosition = (songLength/100)*seekBar.getProgress();
+                    media.seekTo(playPosition);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     public ArrayList<Song> extractData(String s){
@@ -183,9 +222,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return returnString.toString();
     }
-
-
-
 
     private class PrepareMusicPlayer extends AsyncTask<String, Integer, String> {
         protected String doInBackground(String... strings) {

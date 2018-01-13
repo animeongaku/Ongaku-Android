@@ -298,15 +298,60 @@ public class MainActivity extends AppCompatActivity {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DipanshKhandelwal/Ongaku-Android"));
             startActivity(browserIntent);
             return true;
-        }else if(id == R.id.openings) {
-            Toast.makeText(this, "openings", Toast.LENGTH_SHORT).show();
-        }else if(id == R.id.endings) {
-            Toast.makeText(this, "endings", Toast.LENGTH_SHORT).show();
-        }else if(id == R.id.osts) {
-            Toast.makeText(this, "osts", Toast.LENGTH_SHORT).show();
+        }else{
+            if(id == R.id.openings) {
+                prefEditor = sharedPref.edit();
+                Toast.makeText(this, "openings", Toast.LENGTH_SHORT).show();
+                if(item.isChecked()){
+                    item.setChecked(false);
+                    prefEditor.putBoolean(getString(R.string.pref_openings), false);
+                }else{
+                    item.setChecked(true);
+                    prefEditor.putBoolean(getString(R.string.pref_openings), true);
+                }
+                prefEditor.commit();
+            }else {
+                if (id == R.id.endings) {
+                    prefEditor = sharedPref.edit();
+                    Toast.makeText(this, "endings", Toast.LENGTH_SHORT).show();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        prefEditor.putBoolean(getString(R.string.pref_endings), false);
+                    } else {
+                        item.setChecked(true);
+                        prefEditor.putBoolean(getString(R.string.pref_endings), true);
+                    }
+                    prefEditor.commit();
+                } else if (id == R.id.osts) {
+                    prefEditor = sharedPref.edit();
+                    Toast.makeText(this, "osts", Toast.LENGTH_SHORT).show();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        prefEditor.putBoolean(getString(R.string.pref_osts), false);
+                    } else {
+                        item.setChecked(true);
+                        prefEditor.putBoolean(getString(R.string.pref_osts), true);
+                    }
+                    prefEditor.commit();
+                }
+
+                sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+
+                prefOpen = sharedPref.getBoolean(getString(R.string.pref_openings), true);
+                prefEnd = sharedPref.getBoolean(getString(R.string.pref_endings), true);
+                prefOsts = sharedPref.getBoolean(getString(R.string.pref_osts), true);
+
+                list = null;
+                list = extractData(ReadFromfile("data.json", MainActivity.this), prefOpen, prefEnd, prefOsts);
+                adapter = null;
+                adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+                return super.onOptionsItemSelected(item);
+            }
+
         }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onPause() {

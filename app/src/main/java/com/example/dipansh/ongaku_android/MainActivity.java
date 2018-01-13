@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     media.reset();
                     media.setDataSource(urltext);
                     play.setVisibility(View.INVISIBLE);
+                    seekBar.setVisibility(View.INVISIBLE);
                     new PrepareMusicPlayer().execute(urltext);
                     progressBar.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     media.reset();
                     media.setDataSource(urltext);
                     play.setVisibility(View.INVISIBLE);
+                    seekBar.setVisibility(View.INVISIBLE);
                     new PrepareMusicPlayer().execute(urltext);
                     progressBar.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                     media.reset();
                     media.setDataSource(urltext);
                     play.setVisibility(View.INVISIBLE);
+                    seekBar.setVisibility(View.INVISIBLE);
                     new PrepareMusicPlayer().execute(urltext);
                     progressBar.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
@@ -326,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
             media.start();
             progressBar.setVisibility(View.INVISIBLE);
             play.setVisibility(View.VISIBLE);
+            seekBar.setVisibility(View.VISIBLE);
             play.setImageResource(android.R.drawable.ic_media_pause);
             Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
         }

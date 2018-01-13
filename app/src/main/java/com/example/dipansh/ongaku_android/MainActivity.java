@@ -2,6 +2,7 @@ package com.example.dipansh.ongaku_android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -41,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     public ProgressBar progressBar;
     private ProgressBar progressBar2;
     private Handler handler;
+    private Boolean prefOpen, prefEnd, prefOsts;
+    private ArrayList<Song> list;
+    private SongAdapter adapter;
+    private ListView listView;
+
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor prefEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +65,19 @@ public class MainActivity extends AppCompatActivity {
         seekBar = findViewById(R.id.seekBar);
         progressBar2 = findViewById(R.id.progressBar2);
 
-        ArrayList<Song> list = new ArrayList<>();
-        list = extractData(ReadFromfile("data.json", MainActivity.this));
+        sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+
+        prefOpen = sharedPref.getBoolean(getString(R.string.pref_openings), true);
+        prefEnd = sharedPref.getBoolean(getString(R.string.pref_endings), true);
+        prefOsts = sharedPref.getBoolean(getString(R.string.pref_osts), true);
+
+        list = extractData(ReadFromfile("data.json", MainActivity.this), prefOpen, prefEnd, prefOsts);
 
         Toast.makeText(this, "Welcome to Ongaku !!", Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
-        ListView listView = (ListView) findViewById(R.id.list);
-        SongAdapter adapter = null;
+        listView = (ListView) findViewById(R.id.list);
+        adapter = null;
         adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
         listView.setAdapter(adapter);
 
@@ -141,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<Song> extractData(String s){
+    public ArrayList<Song> extractData(String s, Boolean open, Boolean end, Boolean osts){
 
         ArrayList<Song> mylist = new ArrayList<>();
 

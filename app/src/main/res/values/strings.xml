@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Ongaku-Android</string>
     <string name="action_settings">Settings</string>
+
+    <string name="pref_openings">openings</string>
+    <string name="pref_endings">endings</string>
+    <string name="pref_osts">osts</string>
 </resources>

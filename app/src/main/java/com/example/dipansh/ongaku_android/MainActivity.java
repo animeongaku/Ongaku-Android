@@ -369,8 +369,7 @@ public class MainActivity extends AppCompatActivity {
                     prefEditor.putBoolean(getString(R.string.pref_openings), true);
                 }
                 prefEditor.commit();
-            }else {
-                if (id == R.id.endings) {
+            }else if (id == R.id.endings) {
                     prefEditor = sharedPref.edit();
                     Toast.makeText(this, "endings", Toast.LENGTH_SHORT).show();
                     if (item.isChecked()) {
@@ -381,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
                         prefEditor.putBoolean(getString(R.string.pref_endings), true);
                     }
                     prefEditor.commit();
-                } else if (id == R.id.osts) {
+            } else if (id == R.id.osts) {
                     prefEditor = sharedPref.edit();
                     Toast.makeText(this, "osts", Toast.LENGTH_SHORT).show();
                     if (item.isChecked()) {
@@ -405,13 +404,11 @@ public class MainActivity extends AppCompatActivity {
                 adapter = null;
                 adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
                 listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
                 urltext = null;
                 songPosition = 0;
             }
-                return super.onOptionsItemSelected(item);
-            }
 
+        return super.onOptionsItemSelected(item);
         }
 
     @Override

@@ -34,10 +34,13 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton play;
+    private FloatingActionButton next;
+    private FloatingActionButton previous;
     private MediaPlayer media;
     private SeekBar seekBar;
 
     private int songLength;
+    private int songPosition;
     private String urltext;
     public ProgressBar progressBar;
     private ProgressBar progressBar2;
@@ -59,11 +62,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         play = findViewById(R.id.play);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
         progressBar = findViewById(R.id.progressBar);
         media = new MediaPlayer();
         media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         seekBar = findViewById(R.id.seekBar);
         progressBar2 = findViewById(R.id.progressBar2);
+
+        urltext = null;
+        songPosition = 0;
 
         sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
 
@@ -113,6 +121,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(list.size()==songPosition+1){
+                    urltext = list.get(0).getLink();
+                    songPosition = 0;
+                    Toast.makeText(MainActivity.this, list.get(songPosition).getName(), Toast.LENGTH_SHORT).show();
+                }else{
+                    urltext = list.get(songPosition+1).getLink();
+                    songPosition++;
+                    Toast.makeText(MainActivity.this, list.get(songPosition).getName(), Toast.LENGTH_SHORT).show();
+                }
+                try {
+                    media.reset();
+                    media.setDataSource(urltext);
+                    new PrepareMusicPlayer().execute(urltext);
+                    progressBar.setVisibility(View.VISIBLE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -122,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     urltext = song.getLink();
+                    songPosition = position;
                     media.reset();
                     media.setDataSource(urltext);
                     new PrepareMusicPlayer().execute(urltext);
@@ -347,6 +379,8 @@ public class MainActivity extends AppCompatActivity {
                 adapter = new SongAdapter(MainActivity.this ,R.layout.list_item ,list);
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                urltext = null;
+                songPosition = 0;
             }
                 return super.onOptionsItemSelected(item);
             }

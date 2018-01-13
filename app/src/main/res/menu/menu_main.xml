@@ -17,10 +17,6 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/osts"
-                android:checkable="true"
-                android:title="Osts" />
-            <item
                 android:id="@+id/openings"
                 android:checkable="true"
                 android:title="Openings" />
@@ -28,6 +24,10 @@
                 android:id="@+id/endings"
                 android:checkable="true"
                 android:title="Endings" />
+            <item
+                android:id="@+id/osts"
+                android:checkable="true"
+                android:title="Osts" />
         </menu>
     </item>
 </menu>

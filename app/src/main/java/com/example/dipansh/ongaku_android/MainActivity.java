@@ -273,6 +273,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        prefOpen = sharedPref.getBoolean(getString(R.string.pref_openings), true);
+        prefEnd = sharedPref.getBoolean(getString(R.string.pref_endings), true);
+        prefOsts = sharedPref.getBoolean(getString(R.string.pref_osts), true);
+        menu.getItem(1).getSubMenu().getItem(0).setChecked(prefOpen);
+        menu.getItem(1).getSubMenu().getItem(1).setChecked(prefEnd);
+        menu.getItem(1).getSubMenu().getItem(2).setChecked(prefOsts);
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long

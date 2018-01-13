@@ -210,6 +210,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        media.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
+            }
+        });
+
     }
 
     public ArrayList<Song> extractData(String s, Boolean open, Boolean end, Boolean osts){

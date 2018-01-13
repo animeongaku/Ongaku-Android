@@ -144,6 +144,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(songPosition-1 < 0){
+                    urltext = list.get(list.size()-1).getLink();
+                    songPosition = list.size()-1;
+                    Toast.makeText(MainActivity.this, list.get(songPosition).getName(), Toast.LENGTH_SHORT).show();
+                }else{
+                    urltext = list.get(songPosition-1).getLink();
+                    songPosition--;
+                    Toast.makeText(MainActivity.this, list.get(songPosition).getName(), Toast.LENGTH_SHORT).show();
+                }
+                try {
+                    media.reset();
+                    media.setDataSource(urltext);
+                    new PrepareMusicPlayer().execute(urltext);
+                    progressBar.setVisibility(View.VISIBLE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

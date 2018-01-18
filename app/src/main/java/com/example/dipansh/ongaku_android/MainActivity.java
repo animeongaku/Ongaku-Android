@@ -424,14 +424,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        media.pause();
+        if(media!=null){
+            media.release();
+        }
         play.setImageResource(android.R.drawable.ic_media_play);
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        media.release();
+        if(media!=null){
+            media.release();
+        }
         super.onStop();
     }
 }
